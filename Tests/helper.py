@@ -5,7 +5,7 @@ from __future__ import print_function
 import sys
 import tempfile
 import os
-import unittest
+import unittest2 as unittest
 
 from PIL import Image, ImageMath
 
