@@ -74,6 +74,7 @@
 #define PILLOW_VERSION "4.2.0.dev0"
 
 #include "Python.h"
+#include "capsulethunk.h"
 
 #ifdef HAVE_LIBZ
 #include "zlib.h"
