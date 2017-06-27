@@ -11,6 +11,7 @@ pip install check-manifest
 pip install olefile
 pip install pyroma
 pip install coverage
+pip install unittest2
 
 # docs only on Python 2.7
 if [ "$TRAVIS_PYTHON_VERSION" == "2.7" ]; then pip install -r requirements.txt ; fi
