@@ -1521,7 +1521,7 @@ class AppendingTiffWriter:
     #    JPEGQTables = 519
     #    JPEGDCTables = 520
     #    JPEGACTables = 521
-    Tags = {273, 288, 324, 519, 520, 521}
+    Tags = set([273, 288, 324, 519, 520, 521])
 
     def __init__(self, fn, new=False):
         if hasattr(fn, 'read'):
