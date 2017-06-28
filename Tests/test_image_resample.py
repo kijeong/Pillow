@@ -240,7 +240,7 @@ class CoreResampleAlphaCorrectTest(PillowTestCase):
     def run_levels_case(self, i):
         px = i.load()
         for y in range(i.size[1]):
-            used_colors = {px[x, y][0] for x in range(i.size[0])}
+            used_colors = set([px[x, y][0] for x in range(i.size[0])])
             self.assertEqual(256, len(used_colors),
                             'All colors should present in resized image. '
                             'Only {0} on {1} line.'.format(len(used_colors), y))
