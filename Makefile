@@ -55,6 +55,7 @@ inplace: clean
 	python setup.py build_ext --inplace
 
 install:
+	pip install unittest2
 	python setup.py install
 	python selftest.py --installed
 
