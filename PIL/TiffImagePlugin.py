@@ -290,7 +290,7 @@ class IFDRational(Rational):
             return
 
         elif denominator == 1:
-            self._val = Fraction(value)
+            self._val = Fraction("{0}".format(value))
         else:
             self._val = Fraction(value, denominator)
 
