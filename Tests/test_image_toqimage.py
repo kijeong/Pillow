@@ -48,7 +48,7 @@ class TestToQImage(PillowQtTestCase, PillowTestCase):
                 continue
 
             # Test saving the file
-            tempfile = self.tempfile('temp_{}.png'.format(mode))
+            tempfile = self.tempfile('temp_{0}.png'.format(mode))
             data.save(tempfile)
 
             # Check that it actually worked.

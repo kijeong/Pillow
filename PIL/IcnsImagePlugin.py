@@ -313,7 +313,7 @@ def _save(im, fp, filename):
     last_w = None
     last_im = None
     for w in [16, 32, 128, 256, 512]:
-        prefix = 'icon_{}x{}'.format(w, w)
+        prefix = 'icon_{0}x{1}'.format(w, w)
 
         if last_w == w:
             im_scaled = last_im

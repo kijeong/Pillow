@@ -507,7 +507,7 @@ def _getmp(self):
         rawmpentries = mp[0xB002]
         for entrynum in range(0, quant):
             unpackedentry = struct.unpack_from(
-                '{}LLLHH'.format(endianness), rawmpentries, entrynum * 16)
+                '{0}LLLHH'.format(endianness), rawmpentries, entrynum * 16)
             labels = ('Attribute', 'Size', 'DataOffset', 'EntryNo1',
                       'EntryNo2')
             mpentry = dict(zip(labels, unpackedentry))

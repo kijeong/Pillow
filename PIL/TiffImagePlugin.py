@@ -576,7 +576,7 @@ class ImageFileDirectory_v2(collections.MutableMapping):
         TYPES[idx] = name
         size = struct.calcsize("=" + fmt)
         _load_dispatch[idx] = size, lambda self, data, legacy_api=True: (
-            self._unpack("{}{}".format(len(data) // size, fmt), data))
+            self._unpack("{0}{1}".format(len(data) // size, fmt), data))
         _write_dispatch[idx] = lambda self, *values: (
             b"".join(self._pack(fmt, value) for value in values))
 
@@ -612,7 +612,7 @@ class ImageFileDirectory_v2(collections.MutableMapping):
 
     @_register_loader(5, 8)
     def load_rational(self, data, legacy_api=True):
-        vals = self._unpack("{}L".format(len(data) // 4), data)
+        vals = self._unpack("{0}L".format(len(data) // 4), data)
 
         def combine(a, b): return (a, b) if legacy_api else IFDRational(a, b)
         return tuple(combine(num, denom)
@@ -633,7 +633,7 @@ class ImageFileDirectory_v2(collections.MutableMapping):
 
     @_register_loader(10, 8)
     def load_signed_rational(self, data, legacy_api=True):
-        vals = self._unpack("{}l".format(len(data) // 4), data)
+        vals = self._unpack("{0}l".format(len(data) // 4), data)
 
         def combine(a, b): return (a, b) if legacy_api else IFDRational(a, b)
         return tuple(combine(num, denom)

@@ -129,7 +129,7 @@ class TestImageDraw(PillowTestCase):
         # Arrange
         im = Image.new(mode, (W, H))
         draw = ImageDraw.Draw(im)
-        expected = "Tests/images/imagedraw_chord_{}.png".format(mode)
+        expected = "Tests/images/imagedraw_chord_{0}.png".format(mode)
 
         # Act
         draw.chord(bbox, start, end, fill="red", outline="yellow")
@@ -152,7 +152,7 @@ class TestImageDraw(PillowTestCase):
         # Arrange
         im = Image.new(mode, (W, H))
         draw = ImageDraw.Draw(im)
-        expected = "Tests/images/imagedraw_ellipse_{}.png".format(mode)
+        expected = "Tests/images/imagedraw_ellipse_{0}.png".format(mode)
 
         # Act
         draw.ellipse(bbox, fill="green", outline="blue")
@@ -311,7 +311,7 @@ class TestImageDraw(PillowTestCase):
             # Arrange
             im = Image.new(mode, (W, H))
             draw = ImageDraw.Draw(im)
-            expected = "Tests/images/imagedraw_polygon_kite_{}.png".format(
+            expected = "Tests/images/imagedraw_polygon_kite_{0}.png".format(
                 mode)
 
             # Act

@@ -1824,7 +1824,7 @@ class Image(object):
             try:
                 format = EXTENSION[ext]
             except KeyError:
-                raise ValueError('unknown file extension: {}'.format(ext))
+                raise ValueError('unknown file extension: {0}'.format(ext))
 
         if format.upper() not in SAVE:
             init()
