@@ -35,6 +35,7 @@ services:
 
 install:
   - if [ "$DOCKER" == "" ]; then .travis/install.sh; fi
+  - pip install unittest2
 
 before_install:
   - if [ "$DOCKER" ]; then docker pull pythonpillow/$DOCKER; fi
