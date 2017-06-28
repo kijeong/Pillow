@@ -8,7 +8,7 @@ import sys
 codecs = dir(Image.core)
 
 # For Truncated phng memory leak
-MEM_LIMIT = 1  # max increase in MB
+MEM_LIMIT = 1024  # max increase in KB
 ITERATIONS = 100
 
 # sample png stream
@@ -542,7 +542,7 @@ class TestTruncatedPngPLeaks(PillowTestCase):
     def _get_mem_usage(self):
         from resource import getpagesize, getrusage, RUSAGE_SELF
         mem = getrusage(RUSAGE_SELF).ru_maxrss
-        return mem * getpagesize() / 1024 / 1024
+        return mem * getpagesize() / 1024
 
     def test_leak_load(self):
         with open('Tests/images/hopper.png', 'rb') as f:
