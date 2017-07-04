@@ -3,7 +3,7 @@ import os
 SF_MIRROR = 'http://iweb.dl.sourceforge.net'
 PILLOW_DEPENDS_DIR = 'C:\\pillow-depends\\'
 
-pythons = {  # '26': 7,
+pythons = {'26': 7,
            '27': 7,
            # '32': 7,
            '33': 7.1,
