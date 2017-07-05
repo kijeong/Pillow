@@ -1,7 +1,7 @@
 Pillow
 ======
 
-Python Imaging Library (Fork)
+Python Imaging Library (Fork) - CentOS 6, python 2.6
 -----------------------------
 
 Pillow is the friendly PIL fork by `Alex Clark and Contributors <https://github.com/python-pillow/Pillow/graphs/contributors>`_. PIL is the Python Imaging Library by Fredrik Lundh and Contributors.
