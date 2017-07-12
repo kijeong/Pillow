@@ -1,13 +1,52 @@
 Changelog (Pillow)
 ==================
 
-4.2.0 (unreleased)
+4.3.0 (unreleased)
 ------------------
 
+- Dependencies: Updated libimagequant to 2.10.0 #2605
+  [radarhere]
+  
+- PDF: Renamed parameter to not shadow built-in dict #2612
+  [kijeong]
+
+4.2.1 (2017-07-06)
+------------------
+
+- CI: Fix version specification and test on CI for PyPy/Windows #2608
+  [wiredfool]
+
+4.2.0 (2017-07-01)
+------------------
+
+- Doc: Clarified Image.save:append_images documentation #2604
+  [radarhere]
+
+- CI: Amazon Linux and Centos6 docker images added to TravisCI #2585
+  [wiredfool]
+  
+- Image.alpha_composite added #2595
+  [wiredfool]
+  
+- Complex Text Support #2576
+  [ShamsaHamed, Fahad-Alsaidi, wiredfool]
+  
+- Added threshold parameter to ImageDraw.floodfill #2599
+  [nediamond]
+
+- Added dBATCH parameter to ghostscript command #2588
+  [radarhere]
+
+- JPEG: Adjust buffer size when icc_profile > MAXBLOCK #2596
+  [Darou]
+
+- Specify Pillow Version in one place #2517
+  [wiredfool]
+  
 - CI: Change the owner of the TRAVIS_BUILD_DIR, fixing broken docker runs #2587
   [wiredfool]
 
-- Fix truncated PNG loading for some images, Fix memory leak on truncated PNG images. #2541
+- Fix truncated PNG loading for some images, Fix memory leak on truncated PNG images. #2541, #2598
   [homm]
   
 - Add decompression bomb check to Image.crop #2410
