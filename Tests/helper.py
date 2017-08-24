@@ -5,7 +5,11 @@ from __future__ import print_function
 import sys
 import tempfile
 import os
-import unittest2 as unittest
+
+if sys.version_info[0:2] == (2, 6)
+    import unittest2 as unittest
+else:
+    import unittest
 
 from PIL import Image, ImageMath
 
