@@ -40,13 +40,15 @@ class SimplePatcher(object):
         else:
             delattr(self._parent_obj, self._attr_name)
 
+
 @unittest.skipUnless(HAS_FREETYPE, "ImageFont not Available")
 class TestImageFont(PillowTestCase):
     LAYOUT_ENGINE = ImageFont.LAYOUT_BASIC
 
     # Freetype has different metrics depending on the version.
     # (and, other things, but first things first)
-    METRICS = { ('2', '3'): {'multiline': 30,
+    METRICS = {
+                ('2', '3'): {'multiline': 30,
                              'textsize': 12,
                              'getters': (13, 16)},
                 ('2', '7'): {'multiline': 6.2,
@@ -63,11 +65,11 @@ class TestImageFont(PillowTestCase):
     def setUp(self):
         freetype_version = tuple(ImageFont.core.freetype2_version.split('.'))[:2]
         self.metrics = self.METRICS.get(freetype_version, self.METRICS['Default'])
-    
+
     def get_font(self):
         return ImageFont.truetype(FONT_PATH, FONT_SIZE,
                                   layout_engine=self.LAYOUT_ENGINE)
-    
+
     def test_sanity(self):
         self.assertRegexpMatches(
             ImageFont.core.freetype2_version, r"\d+\.\d+\.\d+$")
@@ -213,6 +215,14 @@ class TestImageFont(PillowTestCase):
                                                       font=ttf,
                                                       align="unknown"))
 
+    def test_draw_align(self):
+        im = Image.new('RGB', (300, 100), 'white')
+        draw = ImageDraw.Draw(im)
+        ttf = self.get_font()
+        line = "some text"
+        draw.text((100, 40), line, (0, 0, 0), font=ttf, align='left')
+        del draw
+
     def test_multiline_size(self):
         ttf = self.get_font()
         im = Image.new(mode='RGB', size=(300, 100))
@@ -248,9 +258,7 @@ class TestImageFont(PillowTestCase):
 
         target = 'Tests/images/multiline_text_spacing.png'
         target_img = Image.open(target)
-        from PIL import ImageChops
-        
-        ImageChops.difference(im, target_img).save('multiline.png')
+
         # Epsilon ~.5 fails with FreeType 2.7
         self.assert_image_similar(im, target_img, self.metrics['multiline'])
 
@@ -395,6 +403,11 @@ class TestImageFont(PillowTestCase):
         # Assert
         self.assert_image_equal(im, target_img)
 
+    def test_getsize_empty(self):
+        font = self.get_font()
+        # should not crash.
+        self.assertEqual((0, 0), font.getsize(''))
+
     def _test_fake_loading_font(self, path_to_fake, fontname):
         # Make a copy of FreeTypeFont so we can patch the original
         free_type_font = copy.deepcopy(ImageFont.FreeTypeFont)
@@ -490,6 +503,7 @@ class TestImageFont(PillowTestCase):
 @unittest.skipUnless(HAS_RAQM, "Raqm not Available")
 class TestImageFont_RaqmLayout(TestImageFont):
     LAYOUT_ENGINE = ImageFont.LAYOUT_RAQM
+
 
 if __name__ == '__main__':
     unittest.main()
