@@ -9,7 +9,7 @@ codecs = dir(Image.core)
 
 # For Truncated phng memory leak
 MEM_LIMIT = 1024  # max increase in KB
-ITERATIONS = 100
+ITERATIONS = 100 # Leak is 56k/iteration, this will leak 5.6megs
 
 # sample png stream
 
@@ -200,7 +200,7 @@ class TestFilePng(PillowTestCase):
         self.assert_image(im, "RGBA", (162, 150))
 
         # image has 124 unique alpha values
-        self.assertEqual(len(im.split()[3].getcolors()), 124)
+        self.assertEqual(len(im.getchannel('A').getcolors()), 124)
 
     def test_load_transparent_rgb(self):
         test_file = "Tests/images/rgb_trns.png"
@@ -212,7 +212,7 @@ class TestFilePng(PillowTestCase):
         self.assert_image(im, "RGBA", (64, 64))
 
         # image has 876 transparent pixels
-        self.assertEqual(im.split()[3].getcolors()[0][0], 876)
+        self.assertEqual(im.getchannel('A').getcolors()[0][0], 876)
 
     def test_save_p_transparent_palette(self):
         in_file = "Tests/images/pil123p.png"
@@ -234,7 +234,7 @@ class TestFilePng(PillowTestCase):
         self.assert_image(im, "RGBA", (162, 150))
 
         # image has 124 unique alpha values
-        self.assertEqual(len(im.split()[3].getcolors()), 124)
+        self.assertEqual(len(im.getchannel('A').getcolors()), 124)
 
     def test_save_p_single_transparency(self):
         in_file = "Tests/images/p_trns_single.png"
@@ -258,7 +258,7 @@ class TestFilePng(PillowTestCase):
         self.assertEqual(im.getpixel((31, 31)), (0, 255, 52, 0))
 
         # image has 876 transparent pixels
-        self.assertEqual(im.split()[3].getcolors()[0][0], 876)
+        self.assertEqual(im.getchannel('A').getcolors()[0][0], 876)
 
     def test_save_p_transparent_black(self):
         # check if solid black image with full transparency
@@ -287,7 +287,7 @@ class TestFilePng(PillowTestCase):
 
         # There are 559 transparent pixels.
         im = im.convert('RGBA')
-        self.assertEqual(im.split()[3].getcolors()[0][0], 559)
+        self.assertEqual(im.getchannel('A').getcolors()[0][0], 559)
 
     def test_save_rgb_single_transparency(self):
         in_file = "Tests/images/caption_6_33_22.png"
@@ -542,13 +542,28 @@ class TestTruncatedPngPLeaks(PillowTestCase):
     def _get_mem_usage(self):
         from resource import getpagesize, getrusage, RUSAGE_SELF
         mem = getrusage(RUSAGE_SELF).ru_maxrss
+<<<<<<< HEAD
         return mem * getpagesize() / 1024
+=======
+        if sys.platform == 'darwin':
+            # man 2 getrusage:
+            #     ru_maxrss    the maximum resident set size utilized (in bytes).
+            return mem / 1024 / 1024 # megs
+        else:
+            # linux
+            # man 2 getrusage
+            #        ru_maxrss (since Linux 2.6.32)
+            #  This is the maximum resident set size used (in  kilobytes).
+            return mem / 1024 # megs
+>>>>>>> upstream/master
 
     def test_leak_load(self):
         with open('Tests/images/hopper.png', 'rb') as f:
             DATA = BytesIO(f.read(16 * 1024))
 
         ImageFile.LOAD_TRUNCATED_IMAGES = True
+        with Image.open(DATA) as im:
+            im.load()
         start_mem = self._get_mem_usage()
         try:
             for _ in range(ITERATIONS):

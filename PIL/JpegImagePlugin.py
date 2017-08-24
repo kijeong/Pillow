@@ -119,8 +119,8 @@ def APP(self, marker):
 
     # If DPI isn't in JPEG header, fetch from EXIF
     if "dpi" not in self.info and "exif" in self.info:
-        exif = self._getexif()
         try:
+            exif = self._getexif()
             resolution_unit = exif[0x0128]
             x_resolution = exif[0x011A]
             try:
@@ -131,7 +131,10 @@ def APP(self, marker):
                 # 1 dpcm = 2.54 dpi
                 dpi *= 2.54
             self.info["dpi"] = dpi, dpi
-        except KeyError:
+        except (KeyError, SyntaxError, ZeroDivisionError):
+            # SyntaxError for invalid/unreadable exif
+            # KeyError for dpi not included
+            # ZeroDivisionError for invalid dpi rational value
             self.info["dpi"] = 72, 72
 
 
@@ -732,8 +735,9 @@ def _save(im, fp, filename):
             bufsize = im.size[0] * im.size[1]
 
     # The exif info needs to be written as one block, + APP1, + one spare byte.
-    # Ensure that our buffer is big enough
-    bufsize = max(ImageFile.MAXBLOCK, bufsize, len(info.get("exif", b"")) + 5)
+    # Ensure that our buffer is big enough. Same with the icc_profile block.
+    bufsize = max(ImageFile.MAXBLOCK, bufsize, len(info.get("exif", b"")) + 5,
+                  len(extra) + 1)
 
     ImageFile._save(im, fp, [("jpeg", (0, 0)+im.size, 0, rawmode)], bufsize)
 

@@ -133,6 +133,19 @@ class TestFileJpeg(PillowTestCase):
         test(ImageFile.MAXBLOCK+1)  # full buffer block plus one byte
         test(ImageFile.MAXBLOCK*4+3)  # large block
 
+    def test_large_icc_meta(self):
+        # https://github.com/python-pillow/Pillow/issues/148
+        # Sometimes the meta data on the icc_profile block is bigger than
+        # Image.MAXBLOCK or the image size.
+        im = Image.open('Tests/images/icc_profile_big.jpg')
+        f = self.tempfile("temp.jpg")
+        icc_profile = im.info["icc_profile"]
+        try:
+            im.save(f, format='JPEG', progressive=True,quality=95,
+                    icc_profile=icc_profile, optimize=True)
+        except IOError:
+            self.fail("Failed saving image with icc larger than image size")
+
     def test_optimize(self):
         im1 = self.roundtrip(hopper())
         im2 = self.roundtrip(hopper(), optimize=0)
@@ -522,6 +535,16 @@ class TestFileJpeg(PillowTestCase):
         # Act / Assert
         self.assertEqual(im.info.get("dpi"), (508, 508))
 
+    def test_dpi_exif_zero_division(self):
+        # Arrange
+        # This is photoshop-200dpi.jpg with EXIF resolution set to 0/0:
+        # exiftool -XResolution=0/0 -YResolution=0/0 photoshop-200dpi.jpg
+        im = Image.open("Tests/images/exif-dpi-zerodivision.jpg")
+
+        # Act / Assert
+        # This should return the default, and not raise a ZeroDivisionError
+        self.assertEqual(im.info.get("dpi"), (72, 72))
+
     def test_no_dpi_in_exif(self):
         # Arrange
         # This is photoshop-200dpi.jpg with resolution removed from EXIF:
@@ -531,6 +554,15 @@ class TestFileJpeg(PillowTestCase):
         # Act / Assert
         # "When the image resolution is unknown, 72 [dpi] is designated."
         # http://www.exiv2.org/tags.html
+        self.assertEqual(im.info.get("dpi"), (72, 72))
+
+    def test_invalid_exif(self):
+        # This is no-dpi-in-exif with the tiff header of the exif block
+        # hexedited from MM * to FF FF FF FF
+        im = Image.open("Tests/images/invalid-exif.jpg")
+
+        # This should return the default, and not a SyntaxError or
+        # OSError for unidentified image.
         self.assertEqual(im.info.get("dpi"), (72, 72))
 
 
